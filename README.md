@@ -1,92 +1,49 @@
 # Edge Quantum 65 — Site
 
-Site vitrine du projet **Edge Quantum 65** : laboratoire R&D en
-intelligence artificielle embarquée, souveraine et air-gappée.
+Site vitrine du laboratoire **Edge Quantum 65** : intelligence artificielle embarquée, souveraine et air-gappée.
 
-**→ [https://edgequantum65.github.io/edge-quantum-65-site/](https://edgequantum65.github.io/edge-quantum-65-site/)**
-
----
-
-## Sujet
-
-Edge Quantum 65 conçoit des systèmes d'IA qui s'installent **dans la
-machine**, pas dans le cloud. Pas de connexion réseau, pas de mise à
-jour distante, pas de dépendance à un service tiers. Une intelligence
-qui vous appartient physiquement.
-
-Le terrain d'exploration actuel du laboratoire couvre :
-
-- **Moteurs physiques** (asynchrones, brushless, pas-à-pas)
-- **Batteries** (LiFePO4, Li-ion, plomb) et leur signature de décharge
-- **Actionneurs** (ventilateurs, pompes, compresseurs, convoyeurs)
-- **Capteurs** (vibration MPU-6050, température DS18B20, courant ACS712)
-
-## Socle technique
-
-| Brique | Rôle |
-|---|---|
-| [NNUE](https://github.com/edgequantum65/chess-engine) | Réseau de neurones spécialisé, mise à jour incrémentale des features |
-| Rust (no_std) | Sécurité mémoire compile-time, pas de runtime, cible Cortex-M et Xtensa |
-| STM32 / ESP32 | Microcontrôleurs souverains (STMicroelectronics Crolles, FR) |
-| Boucle Champion/Challenger | Auto-optimisation locale sans label pré-établi |
-| Fonction de coût L | L = α·Énergie − β·Rendement + γ·Pénalité, gravée en flash |
-
-## Approche algorithmique
-
-Le système n'utilise pas d'IA générative. Il n'a pas besoin de dataset
-pré-étiqueté. La machine apprend en observant sa propre signature
-physique, guidée par une fonction de coût L non modifiable après
-compilation.
-
-Voir le pseudocode sur le site : [Boucle CvC](https://edgequantum65.github.io/edge-quantum-65-site/#philosophie).
-
-## Banc de test : DSGM Chess
-
-Le moteur d'échecs n'est pas le produit, c'est le **laboratoire
-d'entraînement du NNUE**. Toute brique validée aux échecs (HalfKP,
-SCReLU, quantification int16, mise à jour incrémentale) est ensuite
-transposée sur les machines physiques.
-
-Statut actuel (juillet 2026) :
-- Moteur UCI en C et en Rust
-- NNUE HalfKP 40960→256→32→1
-- Table de transposition 1M entrées
-- Killer moves, history heuristic, MVV-LVA, quiescence search
-- Ouverture Polyglot 1.7M positions
-- 9/9 tests unitaires passent sur le port Rust
-
-## Sécurité & souveraineté
-
-Cinq couches de protection indépendantes (détaillées sur le site) :
-
-1. **Potting physique** (résine époxy MG Chemicals 832B)
-2. **Tamper detection** (switch mécanique + mesh PCB)
-3. **Secure Boot + Flash Encryption** (AES-256, RDP niveau 2)
-4. **Signature par Device ID** (chaque firmware lié à l'UID de la puce)
-5. **Pas de code source livré** (uniquement binaires chiffrés et signés)
-
-## Ressources
-
-| Repo | Contenu |
-|---|---|
-| [edge-quantum-65-site](https://github.com/edgequantum65/edge-quantum-65-site) | Ce site (HTML/CSS pur) |
-| [chess-engine](https://github.com/edgequantum65/chess-engine) | Moteur UCI Rust + C avec NNUE |
-| [nnue-embedded](https://github.com/edgequantum65/nnue-embedded) | Crate `no_std` : forward pass NNUE seul |
-| [champion-vs-challenger](https://github.com/edgequantum65/champion-vs-challenger) | Boucle CvC, mode chess et mode embedded |
-| [boitier-3d](https://github.com/edgequantum65/boitier-3d) | Source OpenSCAD du boîtier 80×50×30mm |
-
-Aucun de ces dépôts ne contient d'éléments critiques (poids finaux,
-clés de signature, secrets industriels).
-
-## Localisation
-
-Lannemezan, Hautes-Pyrénées, Occitanie (FR).
-Création de SASU en cours.
-
-## Contact
-
-David Serreau — [edgequantum65@gmail.com](mailto:edgequantum65@gmail.com)
+**→ https://edgequantum65.github.io/edge-quantum-65-site/**
 
 ---
 
-*Edge Quantum 65 — 2026*
+## Deux pôles
+
+| Pôle | Page | Contenu |
+|---|---|---|
+| Technologie embarquée | `technologie.html` | NNUE HalfKP, Rust no_std, boucle Champion/Challenger, fonction de coût L, sécurité matérielle |
+| Portefeuille technologique | `portefeuille.html` | Actifs technologiques licenciables — secteurs et niveaux de maturité, contenu transmis sous NDA |
+| Laboratoire | `laboratoire.html` | Bancs de test, démonstrateurs matériels, méthode et horodatage |
+| Contact | `contact.html` | — |
+
+## Technique
+
+Statique pur : HTML et CSS, plus un fichier JavaScript sans dépendance. Aucun tracker,
+aucun cookie, aucun outil de mesure d'audience. GitHub Pages.
+
+| Fichier | Rôle |
+|---|---|
+| `index.html` | Accueil — position, principes, chiffres mesurés, les deux pôles |
+| `technologie.html` | Socle technique et sécurité matérielle |
+| `portefeuille.html` | Portefeuille technologique (non divulgatif) |
+| `laboratoire.html` | Démonstrateurs et méthode |
+| `contact.html` | Contact |
+| `mentions-legales.html` | Mentions légales (SIRET à compléter à l'immatriculation) |
+| `confidentialite.html` | Politique de confidentialité |
+| `404.html` | Page introuvable |
+| `assets/css/style.css` | Système de design (noir d'atelier, os chaud, ambre résine) |
+| `assets/js/main.js` | Navigation et révélations au défilement |
+
+Typographie : Cormorant Garamond (serif) + Jost (sans).
+Palette : `#0a0a0b` · `#e8e3d8` · `#b98a44` · `#918b7f`.
+
+## Règle éditoriale
+
+Tout chiffre publié sur ce site doit être vérifiable sur le code ou l'inventaire du laboratoire.
+Aucune estimation, aucune projection, aucun engagement non tenu.
+
+Le contenu détaillé du portefeuille technologique n'est **jamais** publié ici : sa divulgation
+détruirait la valeur des dossiers. Il est transmis sous accord de confidentialité.
+
+---
+
+Projet fondé par David Serreau — Lannemezan, Hautes-Pyrénées, Occitanie (FR). 2026.

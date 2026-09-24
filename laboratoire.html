@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratoire — Edge Quantum 65</title>
+  <meta name="description" content="Les démonstrateurs du laboratoire : moteur d'échecs comme banc de test du NNUE, boîtier 3D, firmware embarqué. Méthode de vérification et horodatage.">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20320%20320'%3E%3Crect%20width='320'%20height='320'%20fill='%230a0a0b'/%3E%3Crect%20x='96'%20y='96'%20width='128'%20height='128'%20fill='none'%20stroke='%23b98a44'%20stroke-width='12'/%3E%3Crect%20x='142'%20y='142'%20width='36'%20height='36'%20fill='%23b98a44'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav id="nav">
+    <a class="wordmark" href="index.html">EDGE<b>·</b>QUANTUM<b>·</b>65</a>
+    <ul>
+      <li><a href="technologie.html">Technologie</a></li>
+      <li><a href="portefeuille.html">Portefeuille</a></li>
+      <li><a href="laboratoire.html" class="actif">Laboratoire</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section class="section section-tete reveal">
+      <span class="sur-titre">Le laboratoire</span>
+      <h2 class="titre-section">Nous rendons nos mesures publiques. Pas nos secrets.</h2>
+      <p class="texte-courant">
+        Un laboratoire vit de ce qu'il peut prouver. Chaque brique du socle est d'abord validée
+        sur un banc de test reproductible, avec des chiffres que n'importe qui peut vérifier.
+        Ce qui n'est pas mesuré n'est pas publié.
+      </p>
+    </section>
+
+    <hr class="filet">
+
+    <section class="section reveal">
+      <span class="sur-titre">I — Le banc de test</span>
+      <h2 class="titre-section">Le moteur d'échecs n'est pas le produit.</h2>
+      <p class="texte-courant">
+        C'est notre laboratoire d'entraînement. Les échecs offrent une vérité absolue —
+        on gagne ou on perd — et un terrain d'essai impitoyable pour tout ce qui touche au NNUE :
+        quantification, mise à jour incrémentale, calibration.
+      </p>
+      <p class="texte-courant">
+        Ce que nous validons ici est ensuite transposé sur des machines physiques, où la vérité
+        n'est plus un résultat mais une consommation, une vibration, une température.
+      </p>
+
+      <table class="table-registre">
+        <thead>
+          <tr><th>Élément</th><th>État mesuré</th><th>Vérification</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="fort">Moteur UCI</td><td>Implémentation en C et en Rust</td><td class="hash">dépôts du laboratoire</td></tr>
+          <tr><td class="fort">Réseau</td><td>HalfKP 40960 → 256 → 32 → 1 · SCReLU · int16</td><td class="hash">code source</td></tr>
+          <tr><td class="fort">Ouverture</td><td>1 990 000 positions Polyglot</td><td class="hash">book.bin · chargement UCI</td></tr>
+          <tr><td class="fort">Recherche</td><td>Alpha-bêta, table de transposition, killer moves, history, MVV-LVA, quiescence</td><td class="hash">code source</td></tr>
+          <tr><td class="fort">Tests</td><td>43 tests au vert, 0 échec</td><td class="hash">cargo test · 24/09/2026</td></tr>
+          <tr><td class="fort">Dépendance externe</td><td>shakmaty 0.30 (référence publique)</td><td class="hash">Cargo.toml</td></tr>
+        </tbody>
+      </table>
+
+      <p class="note">
+        <strong>Nous publions aussi ce qui a cassé.</strong>
+        Fin juillet, cinq défauts critiques ont été identifiés dans le portage Rust —
+        décalage d'énumération, mise en miroir de la perspective noire, facteur d'échelle
+        de sortie, drapeau d'arrêt UCI, ordre de priorité des coups — puis corrigés.
+        Les traces de correction sont conservées dans l'historique du code.
+      </p>
+    </section>
+
+    <hr class="filet">
+
+    <section class="section reveal">
+      <span class="sur-titre">II — Passer au physique</span>
+      <h2 class="titre-section">Deux démonstrateurs matériels.</h2>
+      <div class="briques">
+        <div class="brique">
+          <span class="etage">Mécanique</span>
+          <h3>Boîtier paramétrique</h3>
+          <p>Une enveloppe ouverte, dessinée en CAO paramétrique et imprimable. Deux fentes pour attaches, couvercle vissé. Conçue pour être noyée de résine une fois scellée.</p>
+          <span class="tech">80 × 50 × 30 mm · PETG ou ABS</span>
+        </div>
+        <div class="brique">
+          <span class="etage">Firmware</span>
+          <h3>Chaîne capteurs</h3>
+          <p>Acquisition de vibration, de température et de courant sur microcontrôleur, puis injection dans le réseau de neurones. L'observation précède toujours la commande.</p>
+          <span class="tech">vibration · température · courant · sortie PWM</span>
+        </div>
+      </div>
+      <p class="note">
+        <strong>L'observation vient en premier.</strong>
+        Le premier usage est un module qui ne fait qu'observer une machine existante
+        et signaler une dérive naissante. La commande n'est abordée qu'ensuite, avec le client.
+      </p>
+    </section>
+
+    <hr class="filet">
+
+    <section class="section reveal">
+      <span class="sur-titre">III — Méthode</span>
+      <h2 class="titre-section">Comment nous travaillons.</h2>
+      <div class="piliers">
+        <div class="pilier">
+          <span class="numeral">I.</span>
+          <h3>Preuve avant publication</h3>
+          <p>Tout chiffre publié doit être reproductible sur le code ou l'inventaire du laboratoire. Sinon il reste interne.</p>
+        </div>
+        <div class="pilier">
+          <span class="numeral">II.</span>
+          <h3>Horodatage invérifiable sans nous</h3>
+          <p>Les jalons importants — résultats de banc, matrices de décision, relectures — sont horodatés cryptographiquement. La preuve existe sans qu'aucun serveur ne détienne le contenu.</p>
+        </div>
+        <div class="pilier">
+          <span class="numeral">III.</span>
+          <h3>Une chose à la fois</h3>
+          <p>Un front de travail par session, du code figé pour éviter les régressions, et aucune optimisation improvisée. La discipline produit plus que la vitesse.</p>
+        </div>
+      </div>
+      <p class="note">
+        <strong>Sur la publication du code.</strong>
+        Le laboratoire travaille en dépôts privés : les poids finaux, les clés et les secrets
+        industriels ne quittent jamais l'atelier. Les composants logiciels destinés au public
+        sont publiés progressivement, à mesure qu'ils sont débarrassés de ces éléments.
+      </p>
+    </section>
+
+    <hr class="filet">
+
+    <section class="section reveal">
+      <span class="sur-titre">IV — Le cadre</span>
+      <h2 class="titre-section">Lannemezan, Hautes-Pyrénées.</h2>
+      <p class="texte-courant">
+        Un atelier de montagne, en Occitanie. Un travail d'artisan autant que d'ingénieur :
+        les mêmes mains qui écrivent le réseau noyent la résine et vissent le couvercle.
+        La création de la société est en cours.
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>Edge Quantum 65 — Lannemezan · Occitanie</span>
+    <div style="display:flex;gap:28px;" aria-label="Liens">
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a>
+    </div>
+    <span>MMXXVI</span>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

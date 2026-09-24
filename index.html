@@ -1,570 +1,177 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edge Quantum 65 — IA Embarquée Souveraine</title>
-    <meta name="description" content="Laboratoire R&D en intelligence artificielle embarquée, souveraine et air-gappée. NNUE, Rust, STM32, ESP32.">
-    <style>
-        :root {
-            --bg: #0a0a0f;
-            --fg: #e0e0e8;
-            --accent: #00d4aa;
-            --secondary: #6c63ff;
-            --muted: #888;
-            --line: #1a1a2e;
-            --surface: #111122;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg); color: var(--fg); line-height: 1.7;
-        }
-        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-
-        /* Header */
-        header { text-align: center; padding: 6rem 0 4rem; }
-        h1 { font-size: 3.5rem; font-weight: 300; letter-spacing: -0.02em; }
-        h1 span { color: var(--accent); font-weight: 700; }
-        .subtitle { font-size: 1.2rem; color: var(--muted); margin-top: 1rem; }
-        .tagline {
-            font-size: 1.5rem; color: var(--secondary);
-            margin: 2rem 0; font-weight: 300;
-        }
-        .pill {
-            display: inline-block; padding: 0.3rem 1rem; margin: 0.2rem;
-            border: 1px solid #333; border-radius: 20px;
-            font-size: 0.85rem; color: #aaa;
-        }
-        .pill.alt { border-color: var(--accent); color: var(--accent); }
-
-        /* Sections */
-        .section { padding: 3rem 0; border-top: 1px solid var(--line); }
-        h2 {
-            font-size: 1.8rem; font-weight: 300;
-            margin-bottom: 1.5rem; color: var(--accent);
-        }
-        h3 {
-            color: var(--secondary);
-            margin-bottom: 0.5rem; font-size: 1.1rem;
-        }
-        p { color: #bbb; margin-bottom: 0.8rem; }
-        p.lead { font-size: 1.1rem; color: #ccc; max-width: 720px; }
-        p.lead.alt { color: var(--muted); font-style: italic; }
-        code {
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.88em;
-            color: var(--accent);
-            background: rgba(0, 212, 170, 0.05);
-            padding: 0.1em 0.4em;
-            border-radius: 3px;
-        }
-
-        /* Cards */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-        .card h3 { color: var(--secondary); margin-bottom: 0.5rem; font-size: 1.1rem; }
-        .card p { color: #999; font-size: 0.9rem; margin-bottom: 0.5rem; }
-        .card .tag {
-            display: inline-block;
-            font-size: 0.72rem; letter-spacing: 0.05em;
-            color: var(--accent);
-            background: rgba(0, 212, 170, 0.08);
-            padding: 0.15rem 0.5rem;
-            border-radius: 4px;
-            margin-top: 0.4rem;
-        }
-
-        /* Principes */
-        .principles { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-        @media (max-width: 600px) { .principles { grid-template-columns: 1fr; } }
-        .principle {
-            border-left: 3px solid var(--accent);
-            padding: 0.8rem 0 0.8rem 1.2rem;
-        }
-        .principle h4 {
-            color: var(--accent);
-            font-size: 1.05rem; margin-bottom: 0.3rem;
-            font-weight: 500;
-        }
-        .principle p { font-size: 0.9rem; color: #aaa; margin: 0; }
-
-        /* Schéma ASCII */
-        pre {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 1rem 1.2rem;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.82rem;
-            color: #88ddbb;
-            overflow-x: auto;
-            margin: 1rem 0;
-            line-height: 1.4;
-        }
-        pre .comment { color: #666; }
-        pre .accent  { color: var(--accent); }
-        pre .purple  { color: var(--secondary); }
-
-        /* Sécurité */
-        .security { display: flex; flex-direction: column; gap: 0.6rem; }
-        .layer {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-left: 3px solid var(--secondary);
-            border-radius: 6px;
-            padding: 0.9rem 1.2rem;
-        }
-        .layer strong { color: var(--secondary); }
-        .layer p { font-size: 0.88rem; color: #aaa; margin: 0.3rem 0 0; }
-
-        /* Liste de repos */
-        .repos { display: flex; flex-direction: column; gap: 0.6rem; }
-        .repo {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            padding: 0.9rem 1.2rem;
-        }
-        .repo .name {
-            font-family: 'Consolas', 'Monaco', monospace;
-            color: var(--accent);
-            font-size: 0.95rem;
-        }
-        .repo p {
-            font-size: 0.88rem; color: #999; margin: 0.3rem 0 0;
-        }
-
-        /* Chess prototype */
-        .chess {
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 1rem;
-        }
-        .chess .meta {
-            display: flex; flex-wrap: wrap; gap: 0.5rem;
-            margin-top: 0.8rem;
-        }
-        .chess .meta .pill { font-size: 0.78rem; }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 3rem 0;
-            color: #444;
-            font-size: 0.85rem;
-        }
-        a { color: var(--accent); text-decoration: none; }
-        a:hover { text-decoration: underline; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edge Quantum 65 — IA embarquée souveraine</title>
+  <meta name="description" content="Laboratoire R&D à Lannemezan. Intelligence artificielle embarquée, air-gappée, en Rust no_std. Technologie et portefeuille technologique licenciable.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Edge Quantum 65 — IA embarquée souveraine">
+  <meta property="og:description" content="Laboratoire R&D en intelligence artificielle embarquée, souveraine et air-gappée.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://edgequantum65.github.io/edge-quantum-65-site/">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20320%20320'%3E%3Crect%20width='320'%20height='320'%20fill='%230a0a0b'/%3E%3Crect%20x='96'%20y='96'%20width='128'%20height='128'%20fill='none'%20stroke='%23b98a44'%20stroke-width='12'/%3E%3Crect%20x='142'%20y='142'%20width='36'%20height='36'%20fill='%23b98a44'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Edge <span>Quantum</span> 65</h1>
-            <p class="subtitle">IA Embarquée Souveraine</p>
-            <p class="tagline">Air-Gapped · Rust · NNUE · Zéro Cloud</p>
-            <div>
-                <span class="pill">Edge AI</span>
-                <span class="pill">Rust Embedded</span>
-                <span class="pill">NNUE</span>
-                <span class="pill">Sécurité Hardware</span>
-                <span class="pill">Champion vs Challenger</span>
-                <span class="pill">STM32</span>
-            </div>
-        </header>
+  <div class="grain" aria-hidden="true"></div>
 
-        <!-- ============================================ -->
-        <!-- 1. VISION                                     -->
-        <!-- ============================================ -->
-        <section class="section">
-            <h2>Notre Vision</h2>
-            <p class="lead">
-                Concevoir des systèmes d'IA embarquée totalement autonomes, inviolables et souverains.
-                Pas de cloud, pas de mise à jour distante, pas de backdoor. Une intelligence qui vous appartient.
-            </p>
-            <p class="lead alt">
-                Edge Quantum 65 est un laboratoire de R&D basé à Lannemezan (Hautes-Pyrénées).
-                Nous développons, mesurons et publions nos travaux — c'est un travail d'artisan
-                autant que d'ingénieur.
-            </p>
-        </section>
+  <nav id="nav">
+    <a class="wordmark" href="index.html">EDGE<b>·</b>QUANTUM<b>·</b>65</a>
+    <ul>
+      <li><a href="technologie.html">Technologie</a></li>
+      <li><a href="portefeuille.html">Portefeuille</a></li>
+      <li><a href="laboratoire.html">Laboratoire</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
 
-        <!-- ============================================ -->
-        <!-- 2. PHILOSOPHIE — 4 PRINCIPES                 -->
-        <!-- ============================================ -->
-        <section class="section">
-            <h2>Philosophie</h2>
-            <p class="lead">
-                Quatre principes guident chaque décision technique. Ils ne se négocient pas.
-            </p>
-            <div class="principles">
-                <div class="principle">
-                    <h4>Souveraineté</h4>
-                    <p>
-                        Aucune fonction de coût, aucun seuil de sécurité, aucune mise à jour
-                        ne vient d'un serveur distant. Tout est gravé en flash, non modifiable.
-                    </p>
-                </div>
-                <div class="principle">
-                    <h4>Déterminisme</h4>
-                    <p>
-                        Une entrée donnée produit toujours la même sortie. Pas d'aléatoire caché,
-                        pas de génération stochastique. Le système est certifiable.
-                    </p>
-                </div>
-                <div class="principle">
-                    <h4>Frugalité</h4>
-                    <p>
-                        Inférence en microsecondes sur CPU à 240 MHz. Pas de GPU, pas de mémoire
-                        vive au-delà du mégaoctet. Le silicium coûte, l'énergie aussi.
-                    </p>
-                </div>
-                <div class="principle">
-                    <h4>Air-Gap natif</h4>
-                    <p>
-                        Aucune connexion réseau obligatoire. La puce peut être noyée dans
-                        la résine, inaccessible physiquement. L'intelligence reste
-                        opérationnelle hors-ligne pendant 20 ans.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================ -->
-        <!-- 3. TECHNOLOGIES (approfondi)                  -->
-        <!-- ============================================ -->
-        <section class="section">
-            <h2>Technologies</h2>
-            <p class="lead">
-                Six briques composent le socle technologique. Chacune est open-source,
-                auditable, et déjà compilée.
-            </p>
-            <div class="grid">
-                <div class="card">
-                    <h3>NNUE</h3>
-                    <p>
-                        Efficiently Updatable Neural Network : réseau de neurones spécialisé
-                        pour la mise à jour incrémentale. Architecture HalfKP
-                        40960→256→32→1, activation SCReLU, quantification int16.
-                    </p>
-                    <span class="tag">Rust · no_std</span>
-                </div>
-                <div class="card">
-                    <h3>Rust</h3>
-                    <p>
-                        Sécurité mémoire garantie à la compilation. Pas de garbage collector,
-                        pas de runtime caché. Cible ARM Cortex-M (STM32) et Xtensa LX7 (ESP32).
-                    </p>
-                    <span class="tag">edition 2021</span>
-                </div>
-                <div class="card">
-                    <h3>Air-Gapped</h3>
-                    <p>
-                        Aucune connexion réseau par défaut. Puce noyée dans résine époxy
-                        (MG Chemicals 832B). Secure Boot + Flash Encryption. Tamper switch
-                        → effacement RAM.
-                    </p>
-                    <span class="tag">matériel + firmware</span>
-                </div>
-                <div class="card">
-                    <h3>Champion vs Challenger</h3>
-                    <p>
-                        Boucle évolutive locale. Deux jeux de poids s'affrontent sur la même
-                        machine. Le meilleur est promu selon une fonction de coût L gravée
-                        en flash, jamais par Internet.
-                    </p>
-                    <span class="tag">auto-optimisation</span>
-                </div>
-                <div class="card">
-                    <h3>Fonction de coût L</h3>
-                    <p>
-                        L = α·Énergie − β·Rendement + γ·Pénalité. Coefficients α, β, γ
-                        non modifiables après compilation. C'est la métrique physique
-                        qui guide l'apprentissage.
-                    </p>
-                    <span class="tag">physique, pas statistique</span>
-                </div>
-                <div class="card">
-                    <h3>Hardware souverain</h3>
-                    <p>
-                        STMicroelectronics Crolles (Grenoble, FR) pour la production.
-                        RP2350 (UK) en alternative. RISC-V open-source pour le spatial.
-                    </p>
-                    <span class="tag">UE / UK / open</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================ -->
-        <!-- 4. NOTRE APPROCHE — Champion/Challenger       -->
-        <!-- ============================================ -->
-        <section class="section">
-            <h2>Boucle Champion / Challenger</h2>
-            <p class="lead">
-                Notre algorithme central. Pas d'IA générative, pas de réseau pré-entraîné
-                à télécharger : la machine apprend d'elle-même, en local, à partir
-                d'une métrique physique.
-            </p>
-            <pre>
-    <span class="comment"># Boucle CvC — pseudocode</span>
-    <span class="accent">L = α·E − β·R + γ·P</span>     <span class="comment"># fonction de cout (fixee en flash)</span>
-
-    champion   = poids_initiaux
-    challenger = mutation_gaussienne(champion)
-
-    <span class="purple">boucle</span>:
-        mesure_capteurs() → E, R, T
-        p_champ   = champion.propose_commande(E, R, T)
-        p_chal    = challenger.propose_commande(E, R, T)
-        appliquer(p_champ)     <span class="comment"># commande reelle</span>
-        challenger.calcule_en_shadow()  <span class="comment"># prediction, pas d'action</span>
-
-        <span class="purple">si</span> L_challenger + ε < L_champion  <span class="comment">sur k fenetres</span>:
-            <span class="accent">promouvoir</span>(challenger → champion)
-        <span class="purple">sinon</span>:
-            challenger = mutation_gaussienne(champion)
-            <span class="comment"># l'ancien champion reste en memoire pour retrogradation</span>
-            </pre>
-            <p>
-                Le système <strong>n'a pas besoin de label</strong> — la fonction de coût L
-                est le label. Il apprend en observant la machine réelle, pas un dataset
-                pré-étiqueté. C'est ce qui distingue notre approche des solutions cloud :
-                <strong>aucune annotation manuelle, aucun transfert de données, aucun risque
-                de violation de propriété industrielle</strong>.
-            </p>
-        </section>
-
-        <!-- ============================================ -->
-        <!-- 5. DSGM CHESS — notre banc de test            -->
-        <!-- ============================================ -->
-        <section class="section">
-            <h2>DSGM Chess — Le banc de test algorithmique</h2>
-            <p class="lead">
-                Le moteur d'échecs n'est pas le produit. C'est le <strong>laboratoire d'entraînement</strong>
-                du NNUE. Tout ce qu'on valide aux échecs (quantification,HalfKP, mise à
-                jour incrémentale, calibration), on le transpose ensuite sur des machines
-                physiques réelles.
-            </p>
-            <div class="chess">
-                <h3>État du moteur (juillet 2026)</h3>
-                <p>
-                    Moteur UCI en C et en Rust, NNUE HalfKP, ouverture Polyglot (1.7M
-                    positions), recherche alpha-bêta avec table de transposition 1M entrées,
-                    killer moves, history heuristic, MVV-LVA et quiescence search.
-                </p>
-                <p>
-                    Le port Rust a été audité fin juillet : 5 bugs P0 identifiés puis
-                    corrigés (off-by-one Role enum, mirroring perspective noire, scaling
-                    de sortie ×100, stop_flag UCI, ordre de priorité des coups).
-                </p>
-                <div class="meta">
-                    <span class="pill alt">9/9 tests passent</span>
-                    <span class="pill">shakmaty 0.30</span>
-                    <span class="pill">Rust no_std forward pass</span>
-                    <span class="pill">C engine compilé</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================ -->
-        <!-- 6. MARCHÉS (avec exemples concrets)           -->
-        <!-- ============================================ -->
-        <section class="section">
-            <h2>Domaines d'application</h2>
-            <p class="lead">
-                Toute machine physique qui consomme de l'énergie et s'use peut être
-                équipée d'un module Edge Quantum 65. Voici les terrains d'exploration
-                actuels du laboratoire.
-            </p>
-            <div class="grid">
-                <div class="card">
-                    <h3>⚡ Énergie</h3>
-                    <p>
-                        Moteurs asynchrones, onduleurs, batteries LiFePO4, panneaux
-                        solaires. Calibration de la signature de décharge, détection
-                        précoce de cellule défaillante.
-                    </p>
-                </div>
-                <div class="card">
-                    <h3>🚲 Mobilité</h3>
-                    <p>
-                        Vélos à assistance électrique, drones de loisir, trottinettes.
-                        Optimisation de l'autonomie batterie en fonction du relief
-                        et de l'usage réel.
-                    </p>
-                </div>
-                <div class="card">
-                    <h3>🏭 Industrie</h3>
-                    <p>
-                        Ventilateurs, compresseurs, pompes, convoyeurs. Détection de
-                        déséquilibre, de cavitation, de surcouple. Maintenance
-                        prédictive avant casse.
-                    </p>
-                </div>
-                <div class="card">
-                    <h3>🔬 Médical</h3>
-                    <p>
-                        Dispositifs portables (oxymètre, ECG, pompe à insuline).
-                        Monitoring patient hors-ligne, sans transmission cloud,
-                        compatible certification CE.
-                    </p>
-                </div>
-                <div class="card">
-                    <h3>🛡 Défense &amp; aéro</h3>
-                    <p>
-                        Actionneurs de drones, systèmes embarqués durcis. Air-Gap
-                        absolu, résistance au brouillage electromagnetic, certification
-                        durcissement possible.
-                    </p>
-                </div>
-                <div class="card">
-                    <h3>♻️ Upcycling</h3>
-                    <p>
-                        Objets d'occasion (mixeur, ventilateur, perceuse) augmentés
-                        d'un module. Apprentissage de l'usure existante, allongement
-                        de la durée de vie, reconditionnement intelligent.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================ -->
-        <!-- 7. SÉCURITÉ — 5 couches                       -->
-        <!-- ============================================ -->
-        <section class="section">
-            <h2>Sécurité &amp; Souveraineté</h2>
-            <p class="lead">
-                Cinq couches de protection indépendantes. Aucune ne suffit seule,
-                toutes ensemble rendent l'extraction économiquement non rentable.
-            </p>
-            <div class="security">
-                <div class="layer">
-                    <strong>1. Potting physique</strong>
-                    <p>
-                        Résine époxy bi-composant (MG Chemicals 832B). Conductivité
-                        thermique 0,5 W/m·K. Noyage intégral des composants sensibles.
-                        Ouverture forcée = destruction.
-                    </p>
-                </div>
-                <div class="layer">
-                    <strong>2. Tamper detection</strong>
-                    <p>
-                        Tamper switch mécanique sous le potting. Tamper mesh (3 couches
-                        de pistes en serpentin sur le PCB). Toute coupure déclenche
-                        l'effacement instantané des clés en RAM.
-                    </p>
-                </div>
-                <div class="layer">
-                    <strong>3. Secure Boot + Flash Encryption</strong>
-                    <p>
-                        Le microcontrôleur refuse tout firmware non signé. La flash
-                        est chiffrée AES-256-XTS. STM32 RDP niveau 2 = JTAG définitivement
-                        bloqué, irréversible.
-                    </p>
-                </div>
-                <div class="layer">
-                    <strong>4. Signature par Device ID</strong>
-                    <p>
-                        Chaque firmware est lié à l'UID unique du microcontrôleur cible.
-                        Le binaire refuse de booter sur une autre puce. Clé privée
-                        stockée uniquement dans un HSM distant.
-                    </p>
-                </div>
-                <div class="layer">
-                    <strong>5. Pas de code source livré</strong>
-                    <p>
-                        Seuls les binaires chiffrés et signés sont fournis. Jamais le
-                        code source Rust, jamais les poids NNUE finaux, jamais
-                        l'architecture de la fonction de coût L.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================ -->
-        <!-- 8. RESSOURCES & CODE                          -->
-        <!-- ============================================ -->
-        <section class="section">
-            <h2>Ressources &amp; code</h2>
-            <p class="lead">
-                Les composants logiciels sont publiés progressivement sur GitHub.
-                Aucun ne contient d'éléments critiques (poids finaux, clés, secrets).
-            </p>
-            <div class="repos">
-                <div class="repo">
-                    <div class="name">edge-quantum-65-site</div>
-                    <p>
-                        Le code source de ce site (HTML/CSS pur, GitHub Pages-ready).
-                    </p>
-                </div>
-                <div class="repo">
-                    <div class="name">chess-engine (rust/)</div>
-                    <p>
-                        Moteur UCI Rust avec NNUE forward pass <code>no_std</code>,
-                        table de transposition 1M entrées, recherche alpha-bêta,
-                        ouverture Polyglot.
-                    </p>
-                </div>
-                <div class="repo">
-                    <div class="name">nnue-embedded (rust/)</div>
-                    <p>
-                        Crate Rust pur <code>no_std</code> : architecture HalfKP
-                        40960→256→32→1, activation SCReLU, accumulation
-                        incrémentale. Compatible Cortex-M7 et Xtensa LX7.
-                    </p>
-                </div>
-                <div class="repo">
-                    <div class="name">champion-vs-challenger (rust/)</div>
-                    <p>
-                        Binaire unifié avec deux modes : <code>--mode chess</code>
-                        (match UCI) et <code>--mode embedded</code> (boucle CvC
-                        sur télémétrie, fonction de coût L).
-                    </p>
-                </div>
-                <div class="repo">
-                    <div class="name">boitier-3d (hardware/)</div>
-                    <p>
-                        Source OpenSCAD du boîtier 80×50×30mm. Paramétrable, prêt
-                        à imprimer sur Bambu Lab (PETG ou ABS). STL à exporter.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================ -->
-        <!-- 9. CONTACT                                    -->
-        <!-- ============================================ -->
-        <section class="section">
-            <h2>Contact</h2>
-            <p>Projet fondé par <strong>David Serreau</strong> — 2026</p>
-            <p>
-                Localisation : Lannemezan, Hautes-Pyrénées, Occitanie (FR).
-                Création de SASU en cours.
-            </p>
-            <p>
-                <a href="mailto:edgequantum65@gmail.com">edgequantum65@gmail.com</a>
-            </p>
-            <p>
-                <a href="https://github.com/edgequantum65">github.com/edgequantum65</a>
-            </p>
-        </section>
-
-        <footer>
-            <p>Edge Quantum 65 — IA Embarquée Souveraine &mdash; 2026</p>
-        </footer>
+  <header class="hero">
+    <h1>EDGE <b>QUANTUM</b> 65</h1>
+    <p class="sous-titre">« Une intelligence qui vous appartient physiquement. »</p>
+    <p class="echo">IA embarquée · air-gappée · souveraine</p>
+    <div class="pieds">
+      <span>Rust no_std</span>
+      <span>NNUE</span>
+      <span>STM32 · ESP32</span>
+      <span>Zéro cloud</span>
     </div>
+    <div class="fil-descente" aria-hidden="true"></div>
+  </header>
+
+  <main>
+
+    <!-- II · Vision -->
+    <section class="section reveal">
+      <span class="sur-titre">II — La position</span>
+      <h2 class="titre-section">L'intelligence dans la machine, pas dans le nuage.</h2>
+      <p class="texte-courant">
+        Edge Quantum 65 est un laboratoire de R&amp;D installé à Lannemezan, dans les Hautes-Pyrénées.
+        Nous concevons des systèmes d'apprentissage qui fonctionnent sans réseau, sans mise à jour
+        distante et sans dépendance à un service tiers.
+      </p>
+      <p class="texte-courant">
+        Le laboratoire poursuit deux activités distinctes et complémentaires : la
+        <strong>technologie embarquée</strong> — ce qui s'installe dans la machine — et le
+        <strong>portefeuille technologique</strong> — les dossiers techniques prêts à être licenciés.
+      </p>
+    </section>
+
+    <hr class="filet">
+
+    <!-- III · Principes -->
+    <section class="section reveal">
+      <span class="sur-titre">III — Principes</span>
+      <h2 class="titre-section">Quatre règles qui ne se négocient pas.</h2>
+      <div class="piliers">
+        <div class="pilier">
+          <span class="numeral">I.</span>
+          <h3>Souveraineté</h3>
+          <p>Aucun seuil de sécurité, aucune fonction de coût, aucune mise à jour ne vient d'un serveur distant. Tout est gravé en flash, non modifiable après compilation.</p>
+        </div>
+        <div class="pilier">
+          <span class="numeral">II.</span>
+          <h3>Déterminisme</h3>
+          <p>Une entrée donnée produit toujours la même sortie. Pas d'aléatoire caché, pas de génération stochastique : le système est vérifiable.</p>
+        </div>
+        <div class="pilier">
+          <span class="numeral">III.</span>
+          <h3>Frugalité</h3>
+          <p>L'inférence tient sur un microcontrôleur : pas de GPU, pas de gigaoctets de mémoire vive. Le silicium coûte, l'énergie aussi.</p>
+        </div>
+        <div class="pilier">
+          <span class="numeral">IV.</span>
+          <h3>Air-gap natif</h3>
+          <p>Aucune connexion réseau n'est nécessaire au fonctionnement. Une machine qui n'émet pas ne peut pas être attaquée à distance.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="filet">
+
+    <!-- IV · Mesures -->
+    <section class="section reveal">
+      <span class="sur-titre">IV — État du socle</span>
+      <h2 class="titre-section">Ce qui est mesuré, et rien de plus.</h2>
+      <p class="texte-courant">
+        Chaque chiffre publié ici est vérifiable sur le code source du laboratoire au 24 septembre 2026.
+        Aucune estimation, aucune projection.
+      </p>
+      <div class="chiffres">
+        <div class="chiffre">
+          <span class="valeur">43</span>
+          <span class="etiquette">Tests Rust au vert</span>
+          <span class="source">cargo test · 24/09/2026 · 0 échec</span>
+        </div>
+        <div class="chiffre">
+          <span class="valeur">40 960</span>
+          <span class="etiquette">Entrées HalfKP</span>
+          <span class="source">architecture 40960→256→32→1</span>
+        </div>
+        <div class="chiffre">
+          <span class="valeur">1,99 <small>M</small></span>
+          <span class="etiquette">Positions Polyglot</span>
+          <span class="source">book.bin · chargement vérifié en UCI</span>
+        </div>
+        <div class="chiffre">
+          <span class="valeur">0</span>
+          <span class="etiquette">Connexion réseau</span>
+          <span class="source">exigence d'architecture</span>
+        </div>
+      </div>
+    </section>
+
+    <hr class="filet">
+
+    <!-- V · Les deux pôles -->
+    <section class="section reveal">
+      <span class="sur-titre">V — Les deux pôles</span>
+      <h2 class="titre-section">Ce que nous installons. Ce que nous licencions.</h2>
+      <div class="poles">
+        <a class="pole" href="technologie.html">
+          <span class="numeral">I.</span>
+          <h3>Technologie embarquée</h3>
+          <p>Un réseau de neurones frugal, écrit en Rust, qui apprend sur la machine réelle à partir d'une métrique physique — sans dataset étiqueté, sans cloud, sans GPU.</p>
+          <span class="suite">Voir le socle technique →</span>
+        </a>
+        <a class="pole" href="portefeuille.html">
+          <span class="numeral">II.</span>
+          <h3>Portefeuille technologique</h3>
+          <p>Des dossiers techniques complets et horodatés, couvrant plusieurs secteurs industriels, disponibles en licence d'exploitation ou en cession.</p>
+          <span class="suite">Voir le portefeuille →</span>
+        </a>
+      </div>
+    </section>
+
+    <hr class="filet">
+
+    <!-- VI · Contact -->
+    <section class="section reveal">
+      <span class="sur-titre">VI — Travaillons ensemble</span>
+      <h2 class="titre-section">Vous avez une machine qui s'use, ou un besoin sous NDA.</h2>
+      <p class="texte-courant">
+        Nous répondons aux industriels, aux intégrateurs et aux acheteurs de technologie.
+        Les dossiers complets du portefeuille sont transmis sous accord de confidentialité.
+      </p>
+      <div class="contact-bloc" style="margin-top:52px;">
+        <a class="courriel" href="mailto:edgequantum65@gmail.com">edgequantum65@gmail.com</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>Edge Quantum 65 — Lannemezan · Occitanie</span>
+    <div style="display:flex;gap:28px;" aria-label="Liens">
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a>
+    </div>
+    <span>MMXXVI</span>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
