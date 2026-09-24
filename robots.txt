@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://edgequantum65.github.io/edge-quantum-65-site/sitemap.xml
+Sitemap: https://edgequantum65.github.io/sitemap.xml

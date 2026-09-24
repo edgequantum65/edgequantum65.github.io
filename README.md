@@ -2,7 +2,7 @@
 
 Site vitrine du laboratoire **Edge Quantum 65** : intelligence artificielle embarquée, souveraine et air-gappée.
 
-**→ https://edgequantum65.github.io/edge-quantum-65-site/**
+**→ https://edgequantum65.github.io/**
 
 ---
 
