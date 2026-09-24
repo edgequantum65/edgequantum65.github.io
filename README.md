@@ -1,6 +1,6 @@
 # Edge Quantum 65 — Site
 
-Site vitrine du laboratoire **Edge Quantum 65** : intelligence artificielle embarquée, souveraine et air-gappée.
+Site vitrine du laboratoire **Edge Quantum 65** : systèmes embarqués souverains, hors ligne.
 
 **→ https://edgequantum65.github.io/**
 
