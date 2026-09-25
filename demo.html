@@ -100,6 +100,38 @@
         <strong>Les chiffres affichés sont simulés</strong>, pas mesurés sur une machine réelle.
         Le comportement des règles est, lui, identique au firmware (seuils, hystérésis, usure, tendance).
       </p>
+
+      <div class="lignes" style="margin-top:56px;">
+        <div class="ligne">
+          <span class="secteur">Réel</span>
+          <div>
+            <h3>Le moteur de décision</h3>
+            <p>Seuils, hystérésis, calcul d'usure, classes et alertes : ce sont <strong>les formules exactes du firmware embarqué</strong> (<code>observe.rs</code>). Le raisonnement qui décide est authentique.</p>
+          </div>
+          <span class="niveau">Code du laboratoire</span>
+        </div>
+        <div class="ligne">
+          <span class="secteur">Hypothèse</span>
+          <div>
+            <h3>Le signal d'entrée</h3>
+            <p>Vibration, température et puissance sont <strong>simulées</strong>, avec des valeurs plausibles pour une petite machine tournante — pas encore relevées sur un banc physique.</p>
+          </div>
+          <span class="niveau">Signal simulé</span>
+        </div>
+      </div>
+      <p class="note">
+        <strong>Ce que ça change, et ce que ça ne change pas.</strong>
+        Le jour où le module lit de vrais capteurs, seule <em>l'entrée</em> change : la décision est déjà
+        calculée par le même code. C'est ce qui rend cette démonstration utile avant le matériel.
+      </p>
+
+      <p class="texte-courant" style="margin-top:34px;">
+        <strong>Note sur l'emploi du terme « intelligence artificielle ».</strong>
+        Cette démonstration n'utilise <em>aucun</em> réseau de neurones : elle montre la couche
+        déterministe — des règles fixes, une entrée donnée produit toujours la même sortie. Le réseau de
+        neurones embarqué existe (il tourne, compilé pour microcontrôleur) mais reste un
+        <strong>vote complémentaire</strong> : il ne porte jamais seul une alerte.
+      </p>
     </section>
 
     <hr class="filet">
