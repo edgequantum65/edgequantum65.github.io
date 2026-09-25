@@ -20,6 +20,7 @@
       border: 1px solid var(--filet);
       background: linear-gradient(180deg, var(--noir-2), #0c0c0e);
       padding: 30px 30px 26px;
+      min-width: 0;
     }
     .demo-panneau h3 {
       font-family: var(--sans); font-size: 10.5px; letter-spacing: .34em;
@@ -44,7 +45,7 @@
     .decision[data-etat="alert"] { border-color: #c0563a; background: rgba(192,86,58,.12); }
     .decision[data-etat="alert"] .rec { color: #d4704f; }
 
-    .journal { grid-column: 1 / -1; margin-top: 8px; }
+    .journal { grid-column: 1 / -1; margin-top: 8px; min-width: 0; overflow-x: auto; }
     .journal table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
     .journal th { text-align: left; color: var(--brume); font-weight: 400; padding: 9px 12px; border-bottom: 1px solid var(--filet); font-family: var(--sans); letter-spacing: .2em; text-transform: uppercase; font-size: 9.5px; }
     .journal td { padding: 7px 12px; border-bottom: 1px solid rgba(232,227,216,.06); color: rgba(232,227,216,.78); }
@@ -67,7 +68,15 @@
     .ligne-capteur .c { font-family: var(--sans); font-size: 10px; letter-spacing: .26em; text-transform: uppercase; color: rgba(145,139,127,.7); }
     .ligne-capteur .c b { display: block; font-family: var(--mono); font-size: 14px; color: var(--encre); margin-top: 6px; letter-spacing: 0; text-transform: none; }
 
-    @media (max-width: 820px) { .demo-grille { grid-template-columns: 1fr; } }
+    @media (max-width: 820px) {
+      .demo-grille { grid-template-columns: 1fr; }
+      .ligne-capteur { gap: 22px; }
+      .demo-panneau { padding: 24px 20px 20px; }
+      .jauge .val, .jauge .nom { font-size: 12px; }
+      .decision .rec { font-size: 18px; }
+      .journal th, .journal td { padding: 6px 9px; font-size: 11px; white-space: nowrap; }
+      .journal { overflow-x: auto; }
+    }
   </style>
 </head>
 <body>
@@ -90,7 +99,7 @@
       <span class="sur-titre">Démonstration vivante</span>
       <h2 class="titre-section">Du signal à la décision, dans votre navigateur.</h2>
       <p class="texte-courant">
-        Ceci reproduit fidèlement la chaîne réelle du module : une télémétrie (vibration, température,
+        Cette page reproduit la chaîne réelle du module : une télémétrie (vibration, température,
         courant) traverse les règles déterministes et ressort en <strong>décisions typées</strong> —
         journal, surveillance, alerte.
       </p>
@@ -100,7 +109,7 @@
       </p>
       <p class="note">
         <strong>Les chiffres affichés sont simulés</strong>, pas mesurés sur une machine réelle.
-        Le comportement des règles est, lui, identique au firmware (seuils, hystérésis, usure, tendance).
+        Le comportement des règles est identique au firmware (seuils, hystérésis, usure, tendance).
       </p>
 
       <div class="lignes" style="margin-top:56px;">
@@ -116,7 +125,7 @@
           <span class="secteur">Hypothèse</span>
           <div>
             <h3>Le signal d'entrée</h3>
-            <p>Vibration, température et puissance sont <strong>simulées</strong>, avec des valeurs plausibles pour une petite machine tournante — pas encore relevées sur un banc physique.</p>
+            <p>Vibration, température et puissance sont <strong>simulées</strong>, avec des valeurs plausibles pour une machine tournante de petite taille — pas encore relevées sur un banc physique.</p>
           </div>
           <span class="niveau">Signal simulé</span>
         </div>
@@ -124,7 +133,7 @@
       <p class="note">
         <strong>Ce que ça change, et ce que ça ne change pas.</strong>
         Le jour où le module lit de vrais capteurs, seule <em>l'entrée</em> change : la décision est déjà
-        calculée par le même code. C'est ce qui rend cette démonstration utile avant le matériel.
+        calculée par le même code. C'est ce qui la rend utile avant le matériel.
       </p>
 
       <p class="texte-courant" style="margin-top:34px;">
