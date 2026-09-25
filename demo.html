@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Démo vivante — Module d'observation · Edge Quantum 65</title>
+  <meta name="description" content="Démonstration : un signal simulé (vibration, température, courant) traverse le module d'observation et ressort en décisions typées. Fonctionne sans connexion, dans votre navigateur.">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20320%20320'%3E%3Crect%20width='320'%20height='320'%20fill='%230a0a0b'/%3E%3Crect%20x='96'%20y='96'%20width='128'%20height='128'%20fill='none'%20stroke='%23b98a44'%20stroke-width='12'/%3E%3Crect%20x='142'%20y='142'%20width='36'%20height='36'%20fill='%23b98a44'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* --- spécifique page démo --- */
+    .demo-grille { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; margin-top: 56px; }
+    .demo-panneau {
+      border: 1px solid var(--filet);
+      background: linear-gradient(180deg, var(--noir-2), #0c0c0e);
+      padding: 30px 30px 26px;
+    }
+    .demo-panneau h3 {
+      font-family: var(--sans); font-size: 10.5px; letter-spacing: .34em;
+      text-transform: uppercase; color: var(--ambre); font-weight: 400; margin-bottom: 22px;
+    }
+    .jauge { margin-bottom: 22px; }
+    .jauge .haut { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--sans); }
+    .jauge .nom { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--brume); }
+    .jauge .val { font-family: var(--mono); font-size: 15px; color: var(--encre); }
+    .jauge .piste { margin-top: 9px; height: 5px; background: rgba(232,227,216,.09); position: relative; overflow: hidden; }
+    .jauge .piste i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--ambre); transition: width .3s linear, background .3s; }
+    .jauge .piste i.hot { background: #c0563a; }
+
+    .decision {
+      border: 1px solid var(--filet); padding: 24px 26px; margin-bottom: 16px;
+      transition: border-color .4s, background .4s;
+    }
+    .decision .rec { font-family: var(--sans); font-size: 21px; letter-spacing: .16em; color: var(--brume); }
+    .decision .meta { margin-top: 8px; font-family: var(--mono); font-size: 12px; color: var(--brume); }
+    .decision[data-etat="watch"] { border-color: var(--ambre-doux); background: rgba(185,138,68,.07); }
+    .decision[data-etat="watch"] .rec { color: var(--ambre); }
+    .decision[data-etat="alert"] { border-color: #c0563a; background: rgba(192,86,58,.12); }
+    .decision[data-etat="alert"] .rec { color: #d4704f; }
+
+    .journal { grid-column: 1 / -1; margin-top: 8px; }
+    .journal table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
+    .journal th { text-align: left; color: var(--brume); font-weight: 400; padding: 9px 12px; border-bottom: 1px solid var(--filet); font-family: var(--sans); letter-spacing: .2em; text-transform: uppercase; font-size: 9.5px; }
+    .journal td { padding: 7px 12px; border-bottom: 1px solid rgba(232,227,216,.06); color: rgba(232,227,216,.78); }
+    .journal tr.hot td { color: #d4704f; }
+    .journal tr.warn td { color: var(--ambre); }
+    .journal .vide { color: var(--brume); font-family: var(--serif); font-style: italic; }
+
+    .commandes { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px; align-items: center; }
+    .bouton {
+      font-family: var(--sans); font-size: 11px; letter-spacing: .26em; text-transform: uppercase;
+      color: var(--noir); background: var(--ambre); border: 1px solid var(--ambre);
+      padding: 14px 26px; cursor: pointer; transition: opacity .3s;
+    }
+    .bouton:hover { opacity: .85; }
+    .bouton.discret { background: transparent; color: var(--brume); border-color: var(--filet); }
+    .bouton.discret:hover { color: var(--encre); border-color: var(--ambre-doux); }
+    .etat-calib { font-family: var(--mono); font-size: 12px; color: var(--brume); }
+
+    .ligne-capteur { display: flex; gap: 34px; flex-wrap: wrap; margin-top: 30px; }
+    .ligne-capteur .c { font-family: var(--sans); font-size: 10px; letter-spacing: .26em; text-transform: uppercase; color: rgba(145,139,127,.7); }
+    .ligne-capteur .c b { display: block; font-family: var(--mono); font-size: 14px; color: var(--encre); margin-top: 6px; letter-spacing: 0; text-transform: none; }
+
+    @media (max-width: 820px) { .demo-grille { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav id="nav">
+    <a class="wordmark" href="index.html">EDGE<b>·</b>QUANTUM<b>·</b>65</a>
+    <ul>
+      <li><a href="technologie.html">Technologie</a></li>
+      <li><a href="portefeuille.html">Portefeuille</a></li>
+      <li><a href="laboratoire.html">Laboratoire</a></li>
+      <li><a href="demo.html" class="actif">Démo</a></li>
+      <li><a href="a-propos.html">Le fondateur</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section class="section section-tete reveal">
+      <span class="sur-titre">Démonstration vivante</span>
+      <h2 class="titre-section">Du signal à la décision — ici, dans votre navigateur.</h2>
+      <p class="texte-courant">
+        Ceci reproduit fidèlement la chaîne réelle du module : une télémétrie (vibration, température,
+        courant) traverse les règles déterministes et ressort en <strong>décisions typées</strong> —
+        journal, surveillance, alerte.
+      </p>
+      <p class="texte-courant">
+        <strong>Rien ne sort de votre machine.</strong> Ce calcul tourne sur cette page, sans serveur,
+        sans connexion. C'est le principe du module : la décision se prend sur place.
+      </p>
+      <p class="note">
+        <strong>Les chiffres affichés sont simulés</strong>, pas mesurés sur une machine réelle.
+        Le comportement des règles est, lui, identique au firmware (seuils, hystérésis, usure, tendance).
+      </p>
+    </section>
+
+    <hr class="filet">
+
+    <section class="section reveal">
+      <span class="sur-titre">I — La machine</span>
+      <h2 class="titre-section">Ce que le module mesure.</h2>
+
+      <div class="ligne-capteur">
+        <div class="c">Vibration<b id="v-vib">0.040 g</b></div>
+        <div class="c">Température<b id="v-temp">35.0 °C</b></div>
+        <div class="c">Puissance<b id="v-pow">1.80 W</b></div>
+      </div>
+
+      <div class="demo-grille">
+        <div class="demo-panneau">
+          <h3>Capteurs</h3>
+          <div class="jauge">
+            <div class="haut"><span class="nom">Vibration</span><span class="val" id="j-vib">0.040 g</span></div>
+            <div class="piste"><i id="b-vib"></i></div>
+          </div>
+          <div class="jauge">
+            <div class="haut"><span class="nom">Température</span><span class="val" id="j-temp">35.0 °C</span></div>
+            <div class="piste"><i id="b-temp"></i></div>
+          </div>
+          <div class="jauge">
+            <div class="haut"><span class="nom">Puissance</span><span class="val" id="j-pow">1.80 W</span></div>
+            <div class="piste"><i id="b-pow"></i></div>
+          </div>
+          <div class="etat-calib" id="calib">Référence non apprise — valeurs par défaut.</div>
+        </div>
+
+        <div class="demo-panneau">
+          <h3>Décision du module</h3>
+          <div class="decision" id="dec" data-etat="log">
+            <div class="rec" id="dec-rec">LOG</div>
+            <div class="meta" id="dec-meta">rien d'anormal · usure 0.0</div>
+          </div>
+          <div class="etat-calib" id="dec-extra">Tendance : insuffisante (fenêtre en cours).</div>
+        </div>
+
+        <div class="demo-panneau journal">
+          <h3>Journal local (extrait)</h3>
+          <table>
+            <thead>
+              <tr><th>t (s)</th><th>classe</th><th>usure</th><th>p</th><th>vib</th><th>T °C</th><th>W</th><th>décision</th></tr>
+            </thead>
+            <tbody id="journal">
+              <tr><td colspan="8" class="vide">Le journal se remplit au fil du signal…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="commandes">
+        <button class="bouton" id="btn-calme">Machine saine</button>
+        <button class="bouton" id="btn-usure">Usure vibration</button>
+        <button class="bouton" id="btn-chauffe">Montée en température</button>
+        <button class="bouton discret" id="btn-stop">Arrêter</button>
+      </div>
+    </section>
+
+    <hr class="filet">
+
+    <section class="section reveal">
+      <span class="sur-titre">II — Ces trois niveaux</span>
+      <h2 class="titre-section">Observer. Prévenir. Situer l'échéance.</h2>
+      <div class="lignes">
+        <div class="ligne">
+          <span class="secteur">Niveau 1</span>
+          <div><h3>Surveiller</h3><p>Les trois capteurs sont enregistrés en continu. Le journal reste sur la machine — le client le récupère sur une carte ou par câble.</p></div>
+          <span class="niveau">Journal</span>
+        </div>
+        <div class="ligne">
+          <span class="secteur">Niveau 2</span>
+          <div><h3>Prévenir</h3><p>Comparaison au fonctionnement normal. Une dérive déclenche une surveillance, puis une alerte — <strong>l'observation précède toujours la commande</strong>.</p></div>
+          <span class="niveau">Alerte</span>
+        </div>
+        <div class="ligne">
+          <span class="secteur">Niveau 3</span>
+          <div><h3>Prévoir</h3><p>La tendance d'usure est extrapolée : le module estime le temps approximatif avant le seuil, pour planifier l'entretien.</p></div>
+          <span class="niveau">Estimation</span>
+        </div>
+      </div>
+      <p class="note">
+        <strong>Le module ne commande jamais la machine.</strong>
+        Il observe, il prévient, il estime. L'action (ralentir, arrêter) reste au personnel —
+        c'est ce qui le rend non intrusif et sans risque pour la production.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <span>Edge Quantum 65 — Lannemezan · Occitanie</span>
+    <div style="display:flex;gap:28px;" aria-label="Liens">
+      <a href="mentions-legales.html">Mentions légales</a>
+      <a href="confidentialite.html">Confidentialité</a>
+    </div>
+    <span>MMXXVI</span>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+  /* ============================================================
+     Démo embarquée — reproduction des règles du firmware observe.rs
+     Seuils et logique identiques au module (M-OBS).
+     ============================================================ */
+  (function () {
+    'use strict';
+
+    // --- Seuils par défaut (identiques au firmware) ---
+    var TH = {
+      tWatch: 60.0, tCrit: 80.0,
+      vibFactor: 1.5, powerFactor: 1.2,
+      vibNom: 0.05, powerNom: 2.0,
+      enterTicks: 2, releaseRatio: 0.8
+    };
+
+    // --- État ---
+    var st = {
+      t: 0,
+      vibBase: TH.vibNom, powBase: TH.powerNom,
+      nBase: 0,
+      wear: 0,
+      hystTemp: false, hystVib: false, hystPwr: false,
+      runTemp: 0, runVib: 0, runPwr: 0,
+      scen: 'calm',
+      phase: 0,
+      trend: [],
+      last: { v: 0.040, t: 35.0, p: 1.80 },
+      journal: []
+    };
+
+    var timer = null;
+
+    // --- Bruit gaussien (Irwin-Hall 12, comme le firmware) ---
+    function gauss() {
+      var s = 0;
+      for (var i = 0; i < 12; i++) s += Math.random();
+      return s - 6;
+    }
+
+    // --- Scénario → échantillon ---
+    function echantillon() {
+      st.t += 1;
+      st.phase += 1;
+      var prog = st.phase < 16 ? 0 : Math.min(1, (st.phase - 16) / 80);
+      var nv = gauss() * 0.004, nt = gauss() * 0.3, np = gauss() * 0.01;
+
+      if (st.scen === 'calm') {
+        st.last = { v: 0.040 + nv, t: 35.0 + nt, p: 1.80 + np };
+      } else if (st.scen === 'wear') {
+        var cv = 0.075;                                   // seuil vib
+        st.last = { v: 0.040 + (cv - 0.040) * prog + nv, t: 35.0 + nt, p: 1.80 + np };
+      } else if (st.scen === 'heat') {
+        st.last = { v: 0.040 + nv, t: 35.0 + (90.0 - 35.0) * prog + nt, p: 1.80 + np };
+      }
+      st.last.v = Math.max(0, st.last.v);
+      st.last.p = Math.max(0, st.last.p);
+      return st.last;
+    }
+
+    // --- Hystérésis (comme Hysteresis::update du firmware) ---
+    function hyst(actif, hot, cold, run) {
+      if (!actif) {
+        if (hot) {
+          run.n++;
+          if (run.n >= TH.enterTicks) { run.n = 0; actif = true; }
+        } else run.n = 0;
+      } else if (cold) { actif = false; run.n = 0; }
+      return actif;
+    }
+
+    // --- Une étape de décision (miroir de Observer::step) ---
+    function etape(s) {
+      // baseline : 16 premiers ticks
+      if (st.nBase < 16) {
+        var a = 1 / 16;
+        st.vibBase += a * (s.v - st.vibBase);
+        st.powBase += a * (s.p - st.powBase);
+        st.nBase++;
+      }
+
+      var tempHot = s.t > TH.tWatch, tempCrit = s.t > TH.tCrit;
+      var tempCold = s.t < TH.tWatch * TH.releaseRatio;
+      var vibLim = st.vibBase * TH.vibFactor;
+      var vibHot = s.v > vibLim, vibCold = s.v < vibLim * TH.releaseRatio;
+      var pwrLim = st.powBase * TH.powerFactor;
+      var pwrHot = s.p > pwrLim, pwrCold = s.p < pwrLim * TH.releaseRatio;
+
+      st.hystTemp = hyst(st.hystTemp, tempHot || tempCrit, tempCold, st.runTemp);
+      if (tempCrit) st.hystTemp = true;
+      st.hystVib = hyst(st.hystVib, vibHot, vibCold, st.runVib);
+      st.hystPwr = hyst(st.hystPwr, pwrHot, pwrCold, st.runPwr);
+
+      var nAct = (st.hystTemp ? 1 : 0) + (st.hystVib ? 1 : 0) + (st.hystPwr ? 1 : 0);
+      var cls = nAct >= 2 ? 'MULTI' : st.hystTemp ? 'TEMP' : st.hystVib ? 'VIB' : st.hystPwr ? 'CURRENT' : 'NONE';
+      var anom = nAct > 0 || tempCrit;
+      var p = tempCrit ? 0.99 : nAct >= 2 ? 0.90 : nAct === 1 ? 0.75 : 0.0;
+
+      // usure (drift vs baseline)
+      var zt = Math.max(0, (s.t - 40) / 40);
+      var zv = st.vibBase > 1e-4 ? Math.max(0, s.v / st.vibBase - 1) : 0;
+      var zp = st.powBase > 1e-4 ? Math.max(0, s.p / st.powBase - 1) : 0;
+      var cible = Math.min(100, Math.max(0, zt * 40 + zv * 40 + zp * 20));
+      st.wear += 0.25 * (cible - st.wear);
+
+      var rec = (tempCrit || (anom && nAct >= 2 && p >= 0.9)) ? 'ALERT_HUMAN' : anom ? 'WATCH' : 'LOG';
+
+      st.trend.push(st.wear);
+      if (st.trend.length > 60) st.trend.shift();
+
+      return { cls: cls, wear: st.wear, p: p, rec: rec, limV: vibLim, limP: pwrLim };
+    }
+
+    // --- Tendance (régression linéaire, niveau 3) ---
+    function tendance() {
+      var n = st.trend.length;
+      if (n < 3) return null;
+      var sx = (n - 1) * n / 2, sxx = (n - 1) * n * (2 * n - 1) / 6;
+      var sy = 0, sxy = 0;
+      for (var i = 0; i < n; i++) { sy += st.trend[i]; sxy += i * st.trend[i]; }
+      var den = n * sxx - sx * sx;
+      if (Math.abs(den) < 1e-6) return null;
+      var pente = (n * sxy - sx * sy) / den;
+      if (pente <= 1e-6) return { pente: pente, reste: null };
+      var dernier = st.trend[n - 1];
+      var seuil = 80;
+      var reste = dernier >= seuil ? 0 : (seuil - dernier) / pente;
+      return { pente: pente, reste: reste };
+    }
+
+    // --- Rendu ---
+    function majUI(d) {
+      document.getElementById('v-vib').textContent = st.last.v.toFixed(3) + ' g';
+      document.getElementById('v-temp').textContent = st.last.t.toFixed(1) + ' °C';
+      document.getElementById('v-pow').textContent = st.last.p.toFixed(2) + ' W';
+
+      document.getElementById('j-vib').textContent = st.last.v.toFixed(3) + ' g';
+      document.getElementById('j-temp').textContent = st.last.t.toFixed(1) + ' °C';
+      document.getElementById('j-pow').textContent = st.last.p.toFixed(2) + ' W';
+
+      var bv = document.getElementById('b-vib'), bt = document.getElementById('b-temp'), bp = document.getElementById('b-pow');
+      bv.style.width = Math.min(100, st.last.v / 0.15 * 100) + '%';
+      bt.style.width = Math.min(100, st.last.t / 100 * 100) + '%';
+      bp.style.width = Math.min(100, st.last.p / 3 * 100) + '%';
+      bv.className = d.rec === 'ALERT_HUMAN' && d.cls !== 'NONE' && st.last.t < 60 ? 'hot' : '';
+      bt.className = st.last.t > TH.tCrit ? 'hot' : (st.last.t > TH.tWatch ? 'hot' : '');
+      bp.className = '';
+
+      var dec = document.getElementById('dec');
+      dec.dataset.etat = d.rec === 'ALERT_HUMAN' ? 'alert' : d.rec === 'WATCH' ? 'watch' : 'log';
+      document.getElementById('dec-rec').textContent = d.rec;
+      document.getElementById('dec-meta').textContent = d.cls.toLowerCase() + ' · usure ' + d.wear.toFixed(1) + ' · p ' + d.p.toFixed(2);
+
+      var tr = tendance();
+      var ex = document.getElementById('dec-extra');
+      if (!tr) ex.textContent = 'Tendance : insuffisante (fenêtre en cours).';
+      else if (tr.reste === null) ex.textContent = 'Tendance : stable — aucune usure mesurable.';
+      else ex.textContent = 'Tendance : usure ' + tr.pente.toFixed(3) + '/s → seuil 80 estimé dans ≈ ' + Math.round(tr.reste) + ' s.';
+
+      document.getElementById('calib').textContent = st.nBase < 16
+        ? 'Référence non apprise — valeurs par défaut (' + st.nBase + '/16).'
+        : 'Référence apprise [' + st.vibBase.toFixed(3) + ' g · ' + st.powBase.toFixed(2) + ' W].';
+    }
+
+    function ajouteJournal(ts, d) {
+      st.journal.push({ t: ts, d: d });
+      if (st.journal.length > 12) st.journal.shift();
+      var tb = document.getElementById('journal');
+      tb.innerHTML = '';
+      if (st.journal.length === 0) {
+        tb.innerHTML = '<tr><td colspan="8" class="vide">Le journal se remplit au fil du signal…</td></tr>';
+        return;
+      }
+      st.journal.slice().reverse().forEach(function (e) {
+        var tr = document.createElement('tr');
+        var cls = e.d.rec === 'ALERT_HUMAN' ? 'hot' : e.d.rec === 'WATCH' ? 'warn' : '';
+        tr.className = cls;
+        tr.innerHTML = '<td>' + e.t + '</td><td>' + e.d.cls + '</td><td>' + e.d.wear.toFixed(1) +
+          '</td><td>' + e.d.p.toFixed(2) + '</td><td>' + st.last.v.toFixed(3) + '</td><td>' +
+          st.last.t.toFixed(1) + '</td><td>' + st.last.p.toFixed(2) + '</td><td>' + e.d.rec + '</td>';
+        tb.appendChild(tr);
+      });
+    }
+
+    function boucle() {
+      var s = echantillon();
+      var d = etape(s);
+      majUI(d);
+      if (st.t % 2 === 0) ajouteJournal(st.t, d);
+    }
+
+    function demarrer(scen) {
+      arreter();
+      st.scen = scen; st.phase = 0;
+      timer = setInterval(boucle, 350);
+    }
+    function arreter() { if (timer) { clearInterval(timer); timer = null; } }
+
+    function reset(keepScen) {
+      arreter();
+      st.t = 0; st.phase = 0; st.vibBase = TH.vibNom; st.powBase = TH.powerNom;
+      st.nBase = 0; st.wear = 0;
+      st.hystTemp = st.hystVib = st.hystPwr = false;
+      st.runTemp = { n: 0 }; st.runVib = { n: 0 }; st.runPwr = { n: 0 };
+      st.trend = []; st.journal = [];
+      st.last = { v: 0.040, t: 35.0, p: 1.80 };
+      if (!keepScen) st.scen = 'calm';
+      majUI({ cls: 'NONE', wear: 0, p: 0, rec: 'LOG' });
+      ajouteJournal(0, { cls: 'NONE', wear: 0, p: 0, rec: 'LOG' });
+      st.journal = [];
+    }
+
+    document.getElementById('btn-calme').addEventListener('click', function () { reset(); demarrer('calm'); });
+    document.getElementById('btn-usure').addEventListener('click', function () { reset(); demarrer('wear'); });
+    document.getElementById('btn-chauffe').addEventListener('click', function () { reset(); demarrer('heat'); });
+    document.getElementById('btn-stop').addEventListener('click', function () { arreter(); });
+
+    reset();
+  })();
+  </script>
+</body>
+</html>

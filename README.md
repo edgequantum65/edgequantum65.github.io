@@ -11,6 +11,7 @@ Site vitrine du laboratoire **Edge Quantum 65** : systèmes embarqués souverain
 | Pôle | Page | Contenu |
 |---|---|---|
 | Technologie embarquée | `technologie.html` | NNUE HalfKP, Rust no_std, boucle Champion/Challenger, fonction de coût L, sécurité matérielle |
+| Démonstration vivante | `demo.html` | Du signal simulé à la décision — tourne dans le navigateur, sans serveur |
 | Portefeuille technologique | `portefeuille.html` | Actifs technologiques licenciables — secteurs et niveaux de maturité, contenu transmis sous NDA |
 | Laboratoire | `laboratoire.html` | Bancs de test, démonstrateurs matériels, méthode et horodatage |
 | Contact | `contact.html` | — |
@@ -24,6 +25,7 @@ aucun cookie, aucun outil de mesure d'audience. GitHub Pages.
 |---|---|
 | `index.html` | Accueil — position, principes, chiffres mesurés, les deux pôles |
 | `technologie.html` | Socle technique et sécurité matérielle |
+| `demo.html` | Démonstration vivante (signal → décision, dans le navigateur) |
 | `portefeuille.html` | Portefeuille technologique (non divulgatif) |
 | `laboratoire.html` | Démonstrateurs et méthode |
 | `a-propos.html` | Le fondateur — parcours, états réels des réalisations |
