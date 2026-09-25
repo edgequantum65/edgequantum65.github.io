@@ -26,6 +26,7 @@ aucun cookie, aucun outil de mesure d'audience. GitHub Pages.
 | `technologie.html` | Socle technique et sécurité matérielle |
 | `portefeuille.html` | Portefeuille technologique (non divulgatif) |
 | `laboratoire.html` | Démonstrateurs et méthode |
+| `a-propos.html` | Le fondateur — parcours, états réels des réalisations |
 | `contact.html` | Contact |
 | `mentions-legales.html` | Mentions légales (SIRET à compléter à l'immatriculation) |
 | `confidentialite.html` | Politique de confidentialité |
