@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0b">
   <title>Technologie embarquée — Edge Quantum 65</title>
-  <meta name="description" content="Socle technique : NNUE HalfKP 40960→256→32→1 en Rust no_std, sécurité matérielle, boucle Champion/Challenger, fonction de coût L gravée en flash.">
+  <meta name="description" content="Socle technique : réseau de neurones léger embarqué, logiciel souverain, sécurité matérielle, auto-calibration locale et fonction de coût.">
   <meta name="robots" content="index, follow">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20320%20320'%3E%3Crect%20width='320'%20height='320'%20fill='%230a0a0b'/%3E%3Crect%20x='96'%20y='96'%20width='128'%20height='128'%20fill='none'%20stroke='%23b98a44'%20stroke-width='12'/%3E%3Crect%20x='142'%20y='142'%20width='36'%20height='36'%20fill='%23b98a44'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
 
   <nav id="nav">
-    <a class="wordmark" href="index.html">EDGE<b>·</b>QUANTUM<b>·</b>65</a>
+    <a class="wordmark" href="index.html" aria-label="Edge Quantum 65 — accueil">EDGE<b>·</b>QUANTUM<b>·</b>65</a>
     <ul>
       <li><a href="technologie.html" class="actif">Technologie</a></li>
       <li><a href="portefeuille.html">Portefeuille</a></li>
@@ -30,7 +32,7 @@
   <main>
     <section class="section section-tete reveal">
       <span class="sur-titre">Technologie embarquée</span>
-      <h2 class="titre-section">Un réseau de neurones qui tient dans un microcontrôleur.</h2>
+      <h2 class="titre-section">Un réseau de neurones sur microcontrôleur.</h2>
       <p class="texte-courant">
         Le socle repose sur une idée unique : l'apprentissage doit se produire <em>sur la machine</em>,
         à partir d'une grandeur physique mesurable, sans jamais sortir de la machine. Aucun modèle génératif.
@@ -82,7 +84,7 @@
         <div class="brique">
           <span class="etage">Silicium</span>
           <h3>Microcontrôleurs souverains</h3>
-          <p>Cible de production européenne. Le choix du composant compte : traçabilité, disponibilité, et pas de dépendance à un fournisseur unique.</p>
+          <p>Composants traçables et disponibles, sans dépendance à un fournisseur unique.</p>
           <span class="tech">STM32 · ESP32 · RISC-V (exploratoire)</span>
         </div>
 
@@ -117,7 +119,7 @@ boucle:
       </div>
       <p class="note">
         <strong>Aucune annotation manuelle, aucun transfert de données.</strong>
-        La machine apprend en observant sa propre usure et sa propre consommation.
+        Le système apprend à partir de sa propre usure et de sa propre consommation.
         C'est ce qui la distingue d'une solution connectée : rien ne sort, rien n'entre.
       </p>
     </section>
@@ -162,7 +164,7 @@ boucle:
       </table>
       <p class="note">
         <strong>Le portefeuille et la technologie sont deux choses séparées.</strong>
-        Ce que nous installons part sous forme de binaire signé. Ce que nous licencions
+        Ce qui s'installe part sous forme de binaire signé. Ce qui se licencie
         est un dossier documentaire. Jamais l'inverse.
       </p>
     </section>

@@ -3,24 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0b">
   <title>Le fondateur — Edge Quantum 65</title>
-  <meta name="description" content="David Serreau, autodidacte, fondateur d'Edge Quantum 65. Un an de travail seul : moteur d'échecs, réseau de neurones compilé pour microcontrôleur, portefeuille technologique.">
+  <meta name="description" content="David Serreau. Un moteur d'échecs, un réseau de neurones compilé pour microcontrôleur, un portefeuille de technologies documentées. État réel de chaque brique.">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="Le fondateur — Edge Quantum 65">
-  <meta property="og:description" content="Un an de travail, seul. Tout ce qui est affirmé ici est vérifiable.">
-  <meta property="og:type" content="website">
+  <meta property="og:description" content="David Serreau — le laboratoire, les réalisations et leur état réel.">
+  <meta property="og:type" content="profile">
   <meta property="og:url" content="https://edgequantum65.github.io/a-propos.html">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20320%20320'%3E%3Crect%20width='320'%20height='320'%20fill='%230a0a0b'/%3E%3Crect%20x='96'%20y='96'%20width='128'%20height='128'%20fill='none'%20stroke='%23b98a44'%20stroke-width='12'/%3E%3Crect%20x='142'%20y='142'%20width='36'%20height='36'%20fill='%23b98a44'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
 
   <nav id="nav">
-    <a class="wordmark" href="index.html">EDGE<b>·</b>QUANTUM<b>·</b>65</a>
+    <a class="wordmark" href="index.html" aria-label="Edge Quantum 65 — accueil">EDGE<b>·</b>QUANTUM<b>·</b>65</a>
     <ul>
       <li><a href="technologie.html">Technologie</a></li>
       <li><a href="portefeuille.html">Portefeuille</a></li>
@@ -34,47 +36,42 @@
   <main>
     <section class="section section-tete reveal">
       <span class="sur-titre">Le fondateur</span>
-      <h2 class="titre-section">Un an de travail, tout seul.</h2>
+      <h2 class="titre-section">Je suis David Serreau.</h2>
       <p class="texte-courant">
-        Il y a un an, j'ai commencé par écrire un moteur d'échecs. Aujourd'hui, il y a un laboratoire,
-        un réseau de neurones compilé pour microcontrôleur, et un portefeuille de technologies
-        documentées. Entre les deux : une année, seul.
+        Je crée Edge Quantum 65, un laboratoire de recherche et développement, à Lannemezan,
+        dans les Hautes-Pyrénées. Je travaille seul. Ce site présente ce que je fais et où j'en suis.
       </p>
       <p class="texte-courant">
-        Je suis autodidacte et je le dis sans détour : personne ne m'a appris à faire tenir
-        un réseau de neurones sur une puce. Je l'ai appris en le faisant. Une règle gouverne
-        tout ce qui est publié ici : <strong>rien n'est affirmé qui n'ait été mesuré</strong>.
+        Je suis autodidacte. Une règle gouverne tout ce qui est publié ici :
+        <strong>rien n'est affirmé qui n'ait été mesuré</strong>.
       </p>
     </section>
 
     <hr class="filet">
 
     <section class="section reveal">
-      <span class="sur-titre">I — D'où je viens</span>
-      <h2 class="titre-section">Les échecs m'ont formé avant l'ingénierie.</h2>
+      <span class="sur-titre">I — Les échecs</span>
+      <h2 class="titre-section">Les échecs m'ont formé.</h2>
       <p class="texte-courant">
-        Je suis <strong>CCM — Correspondence Chess Master</strong> de la fédération internationale
-        des échecs par correspondance. 29<sup>e</sup> français, 4<sup>e</sup> français au
-        Chess960 et 122<sup>e</sup> mondial, double demi-finaliste du championnat du monde
-        de la spécialité, membre de l'équipe de France de correspondance.
+        Je joue aux échecs par correspondance. Je suis <strong>CCM — Correspondence Chess Master</strong>
+        de la fédération internationale, membre de l'équipe de France de correspondance.
       </p>
       <p class="texte-courant">
-        Ce jeu apprend deux choses qu'on n'oublie pas : <em>préparer au lieu d'improviser</em>,
-        et <em>ne jamais croire une évaluation qu'on n'a pas vérifiée soi-même</em>.
-        Ce sont les deux règles du laboratoire.
+        Ce jeu m'a appris deux choses : préparer au lieu d'improviser, et ne jamais croire une
+        évaluation qu'on n'a pas vérifiée soi-même.
       </p>
     </section>
 
     <hr class="filet">
 
     <section class="section reveal">
-      <span class="sur-titre">II — Ce que j'ai construit</span>
-      <h2 class="titre-section">Un an de travail, seul.</h2>
+      <span class="sur-titre">II — Les réalisations</span>
+      <h2 class="titre-section">Ce que j'ai construit, et son état réel.</h2>
       <p class="texte-courant">
         Le point de départ n'est pas un projet d'entreprise : c'est un moteur d'échecs que j'ai écrit
-        moi-même. Pour jouer à mon niveau, il faut évaluer une position en une fraction de seconde
-        avec quelques kilo-octets de mémoire — exactement ce qu'une machine industrielle exige.
-        Tout le reste est venu de là.
+        moi-même. Pour jouer à un bon niveau, il faut évaluer une position en une fraction de seconde
+        avec quelques kilo-octets de mémoire — ce qu'une machine industrielle exige aussi.
+        Le reste est venu de là.
       </p>
 
       <table class="table-registre">
@@ -100,7 +97,7 @@
           <tr>
             <td class="fort">Module d'observation</td>
             <td>Prototype logiciel : du signal simulé à la décision <span class="attente">pas encore sur une machine</span></td>
-            <td>Produit A</td>
+            <td>Produit en préparation</td>
           </tr>
           <tr>
             <td class="fort">Portefeuille technologique</td>
@@ -118,7 +115,7 @@
       <p class="note">
         <strong>Ce qui reste, je le dis aussi.</strong>
         Le premier essai sur une machine réelle. L'industrialisation du module.
-        L'immatriculation de la société. Le laboratoire n'est pas fini — il est en marche.
+        L'immatriculation de la société. Le laboratoire n'est pas fini, il est en marche.
       </p>
     </section>
 
@@ -126,7 +123,7 @@
 
     <section class="section reveal">
       <span class="sur-titre">III — Comment je travaille</span>
-      <h2 class="titre-section">Comment je travaille.</h2>
+      <h2 class="titre-section">Ma méthode.</h2>
       <div class="piliers">
         <div class="pilier">
           <span class="numeral">I.</span>
@@ -149,17 +146,12 @@
     <hr class="filet">
 
     <section class="section reveal">
-      <span class="sur-titre">IV — Le laboratoire</span>
+      <span class="sur-titre">IV — Le cadre</span>
       <h2 class="titre-section">Lannemezan, Hautes-Pyrénées.</h2>
       <p class="texte-courant">
         Je travaille à Lannemezan, dans les Hautes-Pyrénées. Je fais tout moi-même, du premier au dernier
-        geste : j'écris le logiciel, je câble les capteurs, j'assemble le module.
-      </p>
-      <p class="texte-courant">
-        Le laboratoire a deux activités. La première, c'est la
-        <strong>technologie embarquée</strong> : ce qui s'installe dans la machine.
-        La seconde, c'est le <strong>portefeuille technologique</strong> : des technologies documentées,
-        prêtes à être exploitées.
+        geste : j'écris le logiciel, je câble les capteurs, j'assemble le module. La société est en cours
+        de création.
       </p>
       <div class="contact-bloc" style="margin-top:52px;">
         <a class="courriel" href="mailto:edgequantum65@gmail.com">edgequantum65@gmail.com</a>

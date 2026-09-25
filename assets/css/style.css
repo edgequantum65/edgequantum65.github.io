@@ -18,7 +18,13 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+img, svg, video { max-width: 100%; height: auto; }
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--ambre);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
   background: var(--noir);
@@ -177,6 +183,10 @@ main { max-width: 1160px; margin: 0 auto; padding: 0 32px; }
 
 .reveal { opacity: 0; transform: translateY(36px); transition: opacity 1.2s cubic-bezier(.19,1,.22,1), transform 1.2s cubic-bezier(.19,1,.22,1); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Le navigateur ne calcule que ce qui est proche de l'écran. */
+.section { content-visibility: auto; contain-intrinsic-size: 900px; }
+.hero { content-visibility: visible; }
 
 /* ---- piliers ---- */
 .piliers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px; margin-top: 70px; }

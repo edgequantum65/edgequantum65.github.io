@@ -1,10 +1,12 @@
 /* ============================================================
    Edge Quantum 65 — interactions
-   Navigation + révélations au défilement
+   Navigation + révélations au défilement (léger, sans dépendance)
    ============================================================ */
 
 (function () {
   'use strict';
+
+  var mouvement = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // --- barre de navigation : fond au défilement
   var nav = document.getElementById('nav');
@@ -20,7 +22,7 @@
   // --- révélations progressives
   var cibles = document.querySelectorAll('.reveal');
 
-  if (!('IntersectionObserver' in window)) {
+  if (mouvement || !('IntersectionObserver' in window)) {
     for (var i = 0; i < cibles.length; i++) { cibles[i].classList.add('visible'); }
     return;
   }
